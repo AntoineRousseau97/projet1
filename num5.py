@@ -12,10 +12,8 @@ me = 9.1094E-31*6.242e18 #eV
 mp = 1.6727E-27*6.242e18 #eV 
 re = 2.8179403227e-15 #m
 
-#ne_H20 = 3.385161894888596e23
-#ne_bone = 5.9065706308435045e23
-
-#ne_H20 = 3.342916491E29 #é/m^3
+ne_H20 = 3.385161894888597e+29
+ne_bone = 5.906570630843504e+29
 
 def f(T, ne, I, rho):
     gamma = T/(mp*c**2) + 1
@@ -114,7 +112,7 @@ liste_N = []
 # plt.show()
 
 print(trapeze(1000, 3e6, Ti, ne_H20, I_H20, rho_H2O))
-# print(simpson(100, 1e-16, Ti, ne_H20, I_H20, rho_H2O))
+print(simpson(1000, 3e6, Ti, ne_H20, I_H20, rho_H2O))
         
 
 
