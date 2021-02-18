@@ -24,7 +24,7 @@ list_fraction_bone = [0.063984, 0.278, 0.027, 0.410016, 0.002, 0.07, 0.002, 0.14
 list_molar_mass_bone_g = [1.007, 12.01, 14.007, 15.999, 24.305, 30.974, 32.06, 40.078] #g/mol
 list_molar_mass_bone = [x / 1000 for x in list_molar_mass_bone_g] #kg/mol
 rho_bone = 1850 #kg/m^3
-I_bone = 91.9 # 
+I_bone = 91.9 # eV
 
 #calculation of electron density of materials
 def calc_ne(list_atom_no, list_fraction, list_molar_mass, rho):
@@ -64,6 +64,7 @@ ne_bone = calc_ne(list_atom_bone, list_fraction_bone, list_molar_mass_bone, rho_
 #Printing electron density
 print(ne_H20)
 print(ne_bone)  
+
 
 #Calling the plotting function
 plot_Scol(ne_H20, I_H20, "Scol_H20.png")
