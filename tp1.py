@@ -65,6 +65,7 @@ ne_bone = calc_ne(list_atom_bone, list_fraction_bone, list_molar_mass_bone, rho_
 print(ne_H20)
 print(ne_bone)  
 
+
 #Calling the plotting function
 plot_Scol(ne_H20, I_H20, "Scol_H20.png")
 plot_Scol(ne_bone, I_bone, "Scol_bone.png")
