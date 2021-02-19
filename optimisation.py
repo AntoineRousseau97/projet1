@@ -9,7 +9,6 @@ rho_H2O = 1000
 rho_bone = 1850
 I_H2O = 75 #eV
 I_bone = 91.9 #eV
-#I_H2O = I_bone
 c = 299792458
 me = 9.1094E-31*6.242e18 #eV
 mp = 1.6727E-27*6.242e18 #eV 
@@ -17,14 +16,13 @@ re = 2.8179403227e-15 #m
 
 ne_H2O = 3.385161894888597e+29
 ne_bone = 5.906570630843504e+29
-#ne_H2O = ne_bone
 
 energy_list = []
 
 for i in range(10000):
     energy_list += [moyal.rvs(150, 4)]
     
-
+#definition of function
 def f(T, ne, I, rho):
     gamma = T/(mp*c**2) + 1
     beta = np.sqrt(1- 1/gamma**2)
@@ -33,6 +31,7 @@ def f(T, ne, I, rho):
         
     return rho/Scol
 
+#definition of function's derivative
 def f_prime(T, ne, I):
     gamma = T/(mp*c**2) + 1
     a = 2*me
@@ -40,10 +39,10 @@ def f_prime(T, ne, I):
     d = me/mp
     U = 2*np.pi*(re**2)*me*(c**2)*ne
     k = (a/I)**2
-
+    
     return 1/(U*gamma*(gamma*(4*b*gamma+3*d*(gamma**2))-2*(b+d*gamma)*np.log((k*(c**2)*((gamma**2)-1)**2)/(b+d*gamma))))/((((gamma**2)-1)**2)*(b+d*gamma)*(mp*(c**2)))
 
-
+#function to find if the calculated error is below target precision 
 def test_error(Ri, Ri_old, m, target, found):
     err = (1/((4**m)-1))*np.abs(Ri-Ri_old)
     if found == False:
@@ -76,6 +75,7 @@ def simpson(N, a, b, ne, I, rho):
         
     return (f(a, ne, I, rho)+f(b, ne, I, rho)+4.0*s1+2.0*s2)*h/3.0, theo_error
 
+#Algorithm calculating the integral with trapeze and simpson methods
 def algo(Ti, material, N_i, target, int_type):
     #===========================================
     if material == "water":
@@ -130,9 +130,9 @@ def algo(Ti, material, N_i, target, int_type):
         
         i += 1    
     
-    return Ri, error[0], theo_error
+    return Ri, error[0], theo_error, N_i
 
-
+#function to evaluate the speed of algorithms
 def time_algorithm(int_type, target):
     protons = []
     start_time = timeit.default_timer()
@@ -143,7 +143,7 @@ def time_algorithm(int_type, target):
             integral, error = integrate.quad(lambda x :f(x, ne_H2O, I_H2O, rho_H2O), 3e6, i*1e6)
             protons += [integral]
         else:
-            integral, error, theo_error = algo(i*1e6, "water", 1, target, int_type)
+            integral, error, theo_error, Nmax = algo(i*1e6, "water", 1, target, int_type)
             protons += [integral]
         
         end_time = timeit.default_timer()
@@ -153,16 +153,17 @@ def time_algorithm(int_type, target):
     
 scope_list = []
 
-# Calculating the scope of proton in bones and water with both integration methods
-for i in ["trapeze", "simpson"]:
-    for j in ["water", "bone"]:
-        scope, error, theo_error = algo(Ti, j, 1, 1e-16, i)
-        print(i + ", " +  j + " :")
-        print("result = " + str(scope) + " cm")
-        print("error = " + str(error))
-        print("theo_error = " + str(theo_error) + "\n")
+#Calculating the scope of proton in bones and water with both integration methods
+# for i in ["trapeze", "simpson"]:
+#     for j in ["water", "bone"]:
+#         scope, error, theo_error, Nmax = algo(Ti, j, 1, 1e-16, i)
+#         print(i + ", " +  j + " :")
+#         print("result = " + str(scope) + " cm")
+#         print("error = " + str(error))
+#         print("Nmax = " + str(Nmax))
+#         print("theo_error = " + str(theo_error) + "\n")
 
-# #Calculating speed of algorithms and comparing with scipy.integrate.quad
+#Calculating speed of algorithms and comparing with scipy.integrate.quad
 # proton_scope, time = time_algorithm("trapeze", 1e-8)
 # scope_list += [proton_scope]
 # proton_per_time = np.round(10000/time, 2)
@@ -177,13 +178,27 @@ for i in ["trapeze", "simpson"]:
 # scope_list += [proton_scope]
 # proton_per_time = np.round(10000/time, 2)
 # print("quad : " + str(proton_per_time) + " protons/s")
-     
-# plotting scope in function of energy 
-# for i in range(3):
-#     plt.plot(energy_list, scope_list[i], "k.")
-#     plt.xlabel("Énergie du proton (MeV)")
-#     plt.ylabel("Portée calculée (cm)")
-#     plt.show()
+
+energy_trapeze = []
+energy_simpson = []
+
+for N in range(200, 1893):
+    integral, theo_error = trapeze(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
+    energy_trapeze += [integral]
+    
+for N in range(1, 1513):
+    integral, theo_error = simpson(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
+    energy_simpson += [integral]
+    
+N_trapeze = np.linspace(200, 1892, 1892 - 199)
+N_simpson = np.linspace(1, 512, 512)
+    
+plt.plot(N_trapeze, energy_trapeze, label = "Trapèze")
+plt.show()
+plt.plot(N_simpson, energy_simpson, label = "Simpson")
+plt.show()
+    
+
 
 # plt.hist(scope_list[0], 50, color = "k")
 # plt.xlabel("Énergie (MeV)")
