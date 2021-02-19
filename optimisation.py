@@ -77,7 +77,7 @@ def simpson(N, a, b, ne, I, rho):
 
 #Algorithm calculating the integral with trapeze and simpson methods
 def algo(Ti, material, N_i, target, int_type):
-    #===========================================
+
     if material == "water":
         ne = ne_H2O
         I = I_H2O
@@ -153,6 +153,7 @@ def time_algorithm(int_type, target):
     
 scope_list = []
 
+#============================================================================
 #Calculating the scope of proton in bones and water with both integration methods
 # for i in ["trapeze", "simpson"]:
 #     for j in ["water", "bone"]:
@@ -163,6 +164,7 @@ scope_list = []
 #         print("Nmax = " + str(Nmax))
 #         print("theo_error = " + str(theo_error) + "\n")
 
+#============================================================================
 #Calculating speed of algorithms and comparing with scipy.integrate.quad
 # proton_scope, time = time_algorithm("trapeze", 1e-8)
 # scope_list += [proton_scope]
@@ -179,32 +181,46 @@ scope_list = []
 # proton_per_time = np.round(10000/time, 2)
 # print("quad : " + str(proton_per_time) + " protons/s")
 
-energy_trapeze = []
-energy_simpson = []
-
-for N in range(200, 1893):
-    integral, theo_error = trapeze(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
-    energy_trapeze += [integral]
-    
-for N in range(1, 1513):
-    integral, theo_error = simpson(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
-    energy_simpson += [integral]
-    
-N_trapeze = np.linspace(200, 1892, 1892 - 199)
-N_simpson = np.linspace(1, 512, 512)
-    
-plt.plot(N_trapeze, energy_trapeze, label = "Trapèze")
-plt.show()
-plt.plot(N_simpson, energy_simpson, label = "Simpson")
-plt.show()
-    
-
-
 # plt.hist(scope_list[0], 50, color = "k")
 # plt.xlabel("Énergie (MeV)")
 # plt.ylabel("Nombre de protons")
 # plt.show()
-                       
+                   
+#============================================================================
+energy_trapeze = []
+energy_simpson = []
+N_simpson = []
+
+N_trapeze = np.linspace(200, 1892, 1693)
+N_simpson = [2*x for x in range(100,257)]
+
+# for i in range(1, 257):
+#     N_simpson += [2*i]
+    
+#print(N_simpson)
+
+for N in range(100, 1893):
+    integral, theo_error = trapeze(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
+    energy_trapeze += [integral]
+        
+for N in N_simpson:
+
+    integral, theo_error = simpson(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
+    energy_simpson += [integral]
+    
+    
+plt.plot(N_trapeze, energy_trapeze, label = "Trapèze", color = "k")
+plt.xlabel("Nombre de tranches (N)")
+plt.ylabel("Portée (cm)")
+plt.show()
+plt.plot(N_simpson, energy_simpson, label = "Simpson", color = "k")
+plt.xlabel("Nombre de tranches (N)")
+plt.ylabel("Portée (cm)")
+plt.show()
+#============================================================================   
+
+
+    
                        
                        
                        
