@@ -85,7 +85,7 @@ for i in range(len(E_p)-1):
     lst_s_bone.append(dist_bone)
     E_dep_bone.append((E_p[i]-E_p[i+1])/s_bone/(10**6))
 
-# Graphique énergie du proton selon la distance parcourue
+# Graphique de l'énergie d'un proton selon sa distance parcourue
 
 E_p = (E_p/(10**6))
 plt.plot(lst_s_eau, E_p, label='Distance finale eau = ' + str(np.round(dist_eau, 6)))
@@ -96,7 +96,7 @@ plt.title("Énergie cinétique d'un protons selon \n sa profondeur", fontsize=12
 plt.legend(loc='best')
 plt.show()
 
-# Graphique énergie perdue par le proton par mètre selon la distance parcourue
+# Graphique de l'énergie déposée par un proton par mètre selon sa distance parcourue
 plt.plot(lst_s_eau[1:], E_dep_eau, label='eau')
 plt.plot(lst_s_bone[1:], E_dep_bone, label='os')
 plt.yscale('log')
@@ -106,8 +106,8 @@ plt.title("Énergie déposée par un proton par mètre en \n fonction de sa prof
 plt.legend(loc='best')
 plt.show()
 
-# Portée CSDA/rho des protons en m
+# Portée CSDA/rho des protons [m]
 R_CSDA_eau = integ(g_eau, T_i, T_f, n)
 R_CSDA_bone = integ(g_bone, T_i, T_f, n)
 
-print(R_CSDA_eau, R_CSDA_bone)
+print("R_CSDA_eau = " + str(R_CSDA_eau) + "m", "R_CSDA_bone = " + str(R_CSDA_bone) + "m")
