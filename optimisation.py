@@ -40,7 +40,7 @@ def f_prime(T, ne, I):
     d = me/mp
     U = 2*np.pi*(re**2)*me*(c**2)*ne
     k = (a/I)**2
-
+    
     return 1/(U*gamma*(gamma*(4*b*gamma+3*d*(gamma**2))-2*(b+d*gamma)*np.log((k*(c**2)*((gamma**2)-1)**2)/(b+d*gamma))))/((((gamma**2)-1)**2)*(b+d*gamma)*(mp*(c**2)))
 
 
@@ -130,7 +130,7 @@ def algo(Ti, material, N_i, target, int_type):
         
         i += 1    
     
-    return Ri, error[0], theo_error
+    return Ri, error[0], theo_error, N_i
 
 
 def time_algorithm(int_type, target):
@@ -143,7 +143,7 @@ def time_algorithm(int_type, target):
             integral, error = integrate.quad(lambda x :f(x, ne_H2O, I_H2O, rho_H2O), 3e6, i*1e6)
             protons += [integral]
         else:
-            integral, error, theo_error = algo(i*1e6, "water", 1, target, int_type)
+            integral, error, theo_error, Nmax = algo(i*1e6, "water", 1, target, int_type)
             protons += [integral]
         
         end_time = timeit.default_timer()
@@ -153,42 +153,43 @@ def time_algorithm(int_type, target):
     
 scope_list = []
 
-# Calculating the scope of proton in bones and water with both integration methods
-for i in ["trapeze", "simpson"]:
-    for j in ["water", "bone"]:
-        scope, error, theo_error = algo(Ti, j, 1, 1e-16, i)
-        print(i + ", " +  j + " :")
-        print("result = " + str(scope) + " cm")
-        print("error = " + str(error))
-        print("theo_error = " + str(theo_error) + "\n")
+#Calculating the scope of proton in bones and water with both integration methods
+# for i in ["trapeze", "simpson"]:
+#     for j in ["water", "bone"]:
+#         scope, error, theo_error, Nmax = algo(Ti, j, 1, 1e-16, i)
+#         print(i + ", " +  j + " :")
+#         print("result = " + str(scope) + " cm")
+#         print("error = " + str(error))
+#         print("Nmax = " + str(Nmax))
+#         print("theo_error = " + str(theo_error) + "\n")
 
-# #Calculating speed of algorithms and comparing with scipy.integrate.quad
-# proton_scope, time = time_algorithm("trapeze", 1e-8)
-# scope_list += [proton_scope]
-# proton_per_time = np.round(10000/time, 2)
-# print("trapeze : " + str(proton_per_time) + " protons/s")
+#Calculating speed of algorithms and comparing with scipy.integrate.quad
+proton_scope, time = time_algorithm("trapeze", 1e-8)
+scope_list += [proton_scope]
+proton_per_time = np.round(10000/time, 2)
+print("trapeze : " + str(proton_per_time) + " protons/s")
 
-# proton_scope, time = time_algorithm("simpson", 1e-8)
-# scope_list += [proton_scope]
-# proton_per_time = np.round(10000/time, 2)
-# print("simpson : " + str(proton_per_time) + " protons/s")
+proton_scope, time = time_algorithm("simpson", 1e-8)
+scope_list += [proton_scope]
+proton_per_time = np.round(10000/time, 2)
+print("simpson : " + str(proton_per_time) + " protons/s")
 
-# proton_scope, time = time_algorithm("quad", 1e-8)
-# scope_list += [proton_scope]
-# proton_per_time = np.round(10000/time, 2)
-# print("quad : " + str(proton_per_time) + " protons/s")
+proton_scope, time = time_algorithm("quad", 1e-8)
+scope_list += [proton_scope]
+proton_per_time = np.round(10000/time, 2)
+print("quad : " + str(proton_per_time) + " protons/s")
      
-# plotting scope in function of energy 
-# for i in range(3):
-#     plt.plot(energy_list, scope_list[i], "k.")
-#     plt.xlabel("Énergie du proton (MeV)")
-#     plt.ylabel("Portée calculée (cm)")
-#     plt.show()
+#plotting scope in function of energy 
+for i in range(3):
+    plt.plot(energy_list, scope_list[i], "k.")
+    plt.xlabel("Énergie du proton (MeV)")
+    plt.ylabel("Portée calculée (cm)")
+    plt.show()
 
-# plt.hist(scope_list[0], 50, color = "k")
-# plt.xlabel("Énergie (MeV)")
-# plt.ylabel("Nombre de protons")
-# plt.show()
+plt.hist(scope_list[0], 50, color = "k")
+plt.xlabel("Énergie (MeV)")
+plt.ylabel("Nombre de protons")
+plt.show()
                        
                        
                        
