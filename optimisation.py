@@ -154,7 +154,7 @@ def time_algorithm(int_type, target):
 scope_list = []
 
 #============================================================================
-#Calculating the scope of proton in bones and water with both integration methods
+# #Calculating the scope of proton in bones and water with both integration methods
 # for i in ["trapeze", "simpson"]:
 #     for j in ["water", "bone"]:
 #         scope, error, theo_error, Nmax = algo(Ti, j, 1, 1e-16, i)
@@ -166,62 +166,54 @@ scope_list = []
 
 #============================================================================
 #Calculating speed of algorithms and comparing with scipy.integrate.quad
-# proton_scope, time = time_algorithm("trapeze", 1e-8)
-# scope_list += [proton_scope]
-# proton_per_time = np.round(10000/time, 2)
-# print("trapeze : " + str(proton_per_time) + " protons/s")
+proton_scope, time = time_algorithm("trapeze", 1e-8)
+scope_list += [proton_scope]
+proton_per_time = np.round(10000/time, 2)
+print("trapeze : " + str(proton_per_time) + " protons/s")
 
-# proton_scope, time = time_algorithm("simpson", 1e-8)
-# scope_list += [proton_scope]
-# proton_per_time = np.round(10000/time, 2)
-# print("simpson : " + str(proton_per_time) + " protons/s")
+proton_scope, time = time_algorithm("simpson", 1e-8)
+scope_list += [proton_scope]
+proton_per_time = np.round(10000/time, 2)
+print("simpson : " + str(proton_per_time) + " protons/s")
 
-# proton_scope, time = time_algorithm("quad", 1e-8)
-# scope_list += [proton_scope]
-# proton_per_time = np.round(10000/time, 2)
-# print("quad : " + str(proton_per_time) + " protons/s")
+proton_scope, time = time_algorithm("quad", 1e-8)
+scope_list += [proton_scope]
+proton_per_time = np.round(10000/time, 2)
+print("quad : " + str(proton_per_time) + " protons/s")
 
-# plt.hist(scope_list[0], 50, color = "k")
-# plt.xlabel("Énergie (MeV)")
-# plt.ylabel("Nombre de protons")
-# plt.show()
+plt.hist(scope_list[0], 50, color = "k")
+plt.xlabel("Énergie (MeV)")
+plt.ylabel("Nombre de protons")
+plt.show()
                    
 #============================================================================
-energy_trapeze = []
-energy_simpson = []
-N_simpson = []
+# Plotting the results according to N 
+# energy_trapeze = []
+# energy_simpson = []
+# N_simpson = []
 
-N_trapeze = np.linspace(200, 1892, 1693)
-N_simpson = [2*x for x in range(100,257)]
+# N_trapeze = np.linspace(200, 1892, 1693)
+# N_simpson = [2*x for x in range(100,257)]
 
-# for i in range(1, 257):
-#     N_simpson += [2*i]
-    
-#print(N_simpson)
-
-for N in range(100, 1893):
-    integral, theo_error = trapeze(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
-    energy_trapeze += [integral]
+# for N in range(100, 1893):
+#     integral, theo_error = trapeze(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
+#     energy_trapeze += [integral]
         
-for N in N_simpson:
+# for N in N_simpson:
 
-    integral, theo_error = simpson(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
-    energy_simpson += [integral]
+#     integral, theo_error = simpson(N, 3e6, Ti, ne_H2O, I_H2O, rho_H2O)
+#     energy_simpson += [integral]
     
     
-plt.plot(N_trapeze, energy_trapeze, label = "Trapèze", color = "k")
-plt.xlabel("Nombre de tranches (N)")
-plt.ylabel("Portée (cm)")
-plt.show()
-plt.plot(N_simpson, energy_simpson, label = "Simpson", color = "k")
-plt.xlabel("Nombre de tranches (N)")
-plt.ylabel("Portée (cm)")
-plt.show()
+# plt.plot(N_trapeze, energy_trapeze, label = "Trapèze", color = "k")
+# plt.xlabel("Nombre de tranches (N)")
+# plt.ylabel("Portée (cm)")
+# plt.show()
+# plt.plot(N_simpson, energy_simpson, label = "Simpson", color = "k")
+# plt.xlabel("Nombre de tranches (N)")
+# plt.ylabel("Portée (cm)")
+# plt.show()
 #============================================================================   
 
-
-    
-                       
-                       
                        
     
