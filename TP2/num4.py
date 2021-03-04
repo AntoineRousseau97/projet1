@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import integrate
 import matplotlib.pyplot as plt
+import timeit
 
 
 def V(x):
@@ -22,7 +23,7 @@ def f(E, gamma, n):
     integral, error = integrate.quad(lambda x :g(E,x)[0], x_minus, x_plus)
     return gamma * integral - (n+1/2)*3.141592
 
-def epsilon(gamma, n, error):
+def bissection(gamma, n, error):
     x1 = -1
     x2 = -0.0000000001
     fx1 = f(x1, gamma, n)
@@ -46,36 +47,39 @@ def epsilon(gamma, n, error):
             
     return 0.5*(x1+x2), N
 
-E_list = []
-V_list = []
-N_list = []
-n_list = list(range(20))
-x_list = np.linspace(1, 1.8, 100)
-x_plus_list = []
-x_minus_list = []
+def secante(gamma, n, error):
+    x0 = -1 
+    x1 = -0.0000000001
+    fx0 = f(x0, gamma, n)
+    fx1 = f(x1, gamma, n)
+    N = 0
+    
+    while np.abs(x1 - x0) > error:
+        N += 1
+        x_next = x1 - fx1*((x1-x0)/(fx1-fx0))
+        x0 = x1
+        fx0 = fx1
+        x1 = x_next
+        fx1 = f(x1, gamma, n)
+        
+    return x1, N
 
-for i in n_list:
-    E, N = epsilon(150, i, 1e-8)
-    x_plus, x_minus = x_plusminus(E)
-    E_list += [E]
-    x_plus_list += [x_plus]
-    x_minus_list += [x_minus]
+def time_algorithm(algo_type, target):
+    E_list = []
+    start_time = timeit.default_timer()
     
-for i in x_list:
-    V_list += [V(i)]
-    
-plt.plot(x_list, V_list, "k")
-plt.xlim(0.9, 1.8)
-
-for i in range(len(E_list)):
-    plt.hlines(E_list[i], x_minus_list[i], x_plus_list[i], linestyles = '--')
-
-    if i % 2 == 0:
-        string = "E" + "$_{" + str(i + 1) + "}$"
-        plt.text(x_plus_list[i] + 0.025, E_list[i] - 0.05, string)
-#plt.plot(x_minus_list, E_list, "ko")
-plt.plot(x_plus_list, E_list, "ko") 
-plt.show()
-    
-    
+    for i in range(20):
+        if algo_type == "bissection":
+            E = [bissection(150, i, target)[0]]
+                   
+        elif algo_type == "secante":
+            E = [secante(150, i, target)[0]]
+        
+        E_list += [E]
+        
+        end_time = timeit.default_timer()
             
+    return (end_time-start_time)
+
+print(time_algorithm("bissection", 1e-8))
+print(time_algorithm("secante", 1e-8))
