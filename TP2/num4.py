@@ -1,28 +1,29 @@
 import numpy as np
 from scipy import integrate
-import matplotlib.pyplot as plt
 import timeit
 
-
+#function that defines V(x)
 def V(x):
     return 4*((1/x)**12-(1/x)**6)
 
+#function that defines the function to integrate i.e. (E-v(x))^2
 def g(E,x):
     v = V(x)
     return (E - v)**(1/2), v
 
+#function defining the turning points
 def x_plusminus(E):
     x_minus = 2**(1/6) * (np.sqrt(E+1)/E-1/E)**(1/6)
     x_plus = 2**(1/6) * (-((np.sqrt(E+1)+1)/E))**(1/6)
     return x_plus, x_minus
 
+#function that calculates the integral
 def f(E, gamma, n):
     x_plus, x_minus = x_plusminus(E) 
-    # x_plus = 2**(1/6) * (np.sqrt(E+1)/E-1/E)**(1/6)
-    # x_minus = 2**(1/6) * (-((np.sqrt(E+1)+1)/E))**(1/6)
     integral, error = integrate.quad(lambda x :g(E,x)[0], x_minus, x_plus)
     return gamma * integral - (n+1/2)*3.141592
 
+#function that computes epsilon using the bissection method
 def bissection(gamma, n, error):
     x1 = -1
     x2 = -0.0000000001
@@ -47,7 +48,8 @@ def bissection(gamma, n, error):
             
     return 0.5*(x1+x2), N
 
-def secante(gamma, n, error):
+#function that computes epsilon using the secant methode
+def secant(gamma, n, error):
     x0 = -1 
     x1 = -0.0000000001
     fx0 = f(x0, gamma, n)
@@ -64,6 +66,7 @@ def secante(gamma, n, error):
         
     return x1, N
 
+#function that evaluates the time needed to compute the 20 first energies for a given algorithm
 def time_algorithm(algo_type, target):
     E_list = []
     start_time = timeit.default_timer()
@@ -72,8 +75,8 @@ def time_algorithm(algo_type, target):
         if algo_type == "bissection":
             E = [bissection(150, i, target)[0]]
                    
-        elif algo_type == "secante":
-            E = [secante(150, i, target)[0]]
+        elif algo_type == "secant":
+            E = [secant(150, i, target)[0]]
         
         E_list += [E]
         
@@ -81,5 +84,6 @@ def time_algorithm(algo_type, target):
             
     return (end_time-start_time)
 
-print(time_algorithm("bissection", 1e-8))
-print(time_algorithm("secante", 1e-8))
+#Comparison of algorithm speed
+print("Méthode de la bissection : " + str(1000 * time_algorithm("bissection", 1e-8)) + " ms")
+print("Méthode de la sécante : " + str(1000 * time_algorithm("secant", 1e-8)) + " ms")

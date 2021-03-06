@@ -2,26 +2,28 @@ import numpy as np
 from scipy import integrate
 import matplotlib.pyplot as plt
 
-
+#function that defines V(x)
 def V(x):
     return 4*((1/x)**12-(1/x)**6)
 
+#function that defines the function to integrate i.e. (E-v(x))^2
 def g(E,x):
     v = V(x)
     return (E - v)**(1/2), v
 
+#function defining the turning points
 def x_plusminus(E):
     x_minus = 2**(1/6) * (np.sqrt(E+1)/E-1/E)**(1/6)
     x_plus = 2**(1/6) * (-((np.sqrt(E+1)+1)/E))**(1/6)
     return x_plus, x_minus
 
+#function that calculates the integral
 def f(E, gamma, n):
     x_plus, x_minus = x_plusminus(E) 
-    # x_plus = 2**(1/6) * (np.sqrt(E+1)/E-1/E)**(1/6)
-    # x_minus = 2**(1/6) * (-((np.sqrt(E+1)+1)/E))**(1/6)
     integral, error = integrate.quad(lambda x :g(E,x)[0], x_minus, x_plus)
-    return gamma * integral - (n+1/2)*3.141592
+    return gamma * integral - (n+1/2)*np.pi
 
+#function that computes epsilon with gamma and n as an input
 def epsilon(gamma, n, error):
     x1 = -1
     x2 = -0.0000000001
@@ -54,6 +56,7 @@ x_list = np.linspace(1, 1.8, 100)
 x_plus_list = []
 x_minus_list = []
 
+#for loop that gets the energy for n < 20
 for i in n_list:
     E, N = epsilon(150, i, 1e-8)
     x_plus, x_minus = x_plusminus(E)
@@ -64,6 +67,7 @@ for i in n_list:
 for i in x_list:
     V_list += [V(i)]
     
+#Plotting of V(x) that shows the computed energies and turning points
 plt.plot(x_list, V_list, "k")
 plt.xlim(0.9, 1.8)
 
@@ -73,9 +77,8 @@ for i in range(len(E_list)):
     if i % 2 == 0:
         string = "E" + "$_{" + str(i + 1) + "}$"
         plt.text(x_plus_list[i] + 0.025, E_list[i] - 0.05, string)
-#plt.plot(x_minus_list, E_list, "ko")
+plt.plot(x_minus_list, E_list, "ko")
 plt.plot(x_plus_list, E_list, "ko") 
+plt.xlabel("Position (-)")
+plt.ylabel("Énergie $\epsilon_{n}$ (-) ")
 plt.show()
-    
-    
-            
