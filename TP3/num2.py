@@ -32,21 +32,20 @@ y_points = []
 vx_points = []
 vy_points = []
 
-x_0 = 4e9 #km
-y_0 = 0 #km
+x_0 = 4e12 #m
+y_0 = 0 #m
 vx_0 = 0 #m/s
 vy_0 = 500 #m/s
-r = array([x_0, y_0, vx_0, vy_0], float)
+r = array([x_0, y_0, vx_0, vy_0], float)    
 
-a = 0 
-b = 20  
-N = 1000          
+a = 0
+b = 31536000*100
+N = 100000
 h = (b-a)/N   
 tpoints = arange(a,b,h)
 
 for t in tpoints:
     append_all(r)
-    
     k1 = h*f(r,t)
     k2 = h*f(r+0.5*k1,t+0.5*h)
     k3 = h*f(r+0.5*k2,t+0.5*h)
@@ -58,7 +57,7 @@ plt.show()
 
 
 
-#x' = v_x
-#v_x' = -GM*x/r**3
-#y' = v_y
-#v_y' = -GM*y/r**3
+# #x' = v_x
+# #v_x' = -GM*x/r**3
+# #y' = v_y
+# #v_y' = -GM*y/r**3
