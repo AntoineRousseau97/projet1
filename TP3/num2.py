@@ -36,7 +36,7 @@ x_0 = 4e12 #m
 y_0 = 0 #m
 vx_0 = 0 #m/s
 vy_0 = 500 #m/s
-r = array([x_0, y_0, vx_0, vy_0], float)    
+r = array([x_0, y_0, vx_0, vy_0], float)
 
 a = 0
 b = 31536000*100
