@@ -45,45 +45,18 @@ vy_0 = 3.0287e4 #intial y velocity (m/s)
 r = array([x_0, y_0], float)  #array containing x and y position
 v = array([vx_0, vy_0], float) #array containing x and y velocity
 a = 0 #intial time (s)
-b = 31536000*3 #final time (s) (3 years)
-h = 3600 #step size (1 hour in seconds)
+b = 31536000*2 #final time (s) (3 years)
+#N = 100
+h = 5
 tpoints = arange(a,b,h) 
-v_int = v + 0.5*h*f(r,v,0)[1] #initialization of v(t+1/2h)
-Ke = []
-U = []
 
 for t in tpoints:
     append_all(r,v)
-    Ke += [0.5 * m * (v[0] ** 2 + v[1] ** 2)] # Kinectic Energy (J)
-    U += [-GM*m/r_func(r[0], r[1])] # Potential Energy (J)
-    r += h*v_int #r(t+h)
-    k = h*f(r,v,t)[1] #k
-    v = v_int + 0.5*k #v(t+h)
-    v_int += k #v(t+3/2h)
+    k1 = h*f(r,v,t)
+    k2 = h*f(r+0.5*k1[0], v+0.5*k1[1], t+0.5*h)
+    r += k2[0]
+    v += k2[1]
 
-#Changing energy list into arrays to sum them
-Ke = array(Ke)
-U = array(U)
-E_tot = Ke+U #Total energy (sum of potential and kinetic energy) (J)
-
-#Plot of Ke, U and E_tot
-plt.plot(tpoints, Ke, "k", label = "Énergie cinétique")
-plt.plot(tpoints, U, "r", label = "Énergie potentielle")
-plt.plot(tpoints, E_tot, "k--", label = "Énergie totale")
-plt.xlabel("Temps (s)")
-plt.ylabel("Énergie (J)")
-plt.legend()
-plt.title("Bilan d'énergie")
-plt.show()
-
-#Plot of E_tot alone
-plt.plot(tpoints, E_tot, "k")
-plt.xlabel("Temps (s)")
-plt.ylabel("Énergie (J)")
-plt.ticklabel_format(useOffset=False)
-plt.title("Énergie totale en fonction du temps")
-plt.show()
-    
 #Plot of x position and y position in function of time
 plt.plot(tpoints, x_points, color = "k", label = "Position en x")
 plt.plot(tpoints, y_points, color = "r", label = "Position en y")
