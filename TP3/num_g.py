@@ -28,7 +28,7 @@ def r_func(x,y):
 
 def f(r):
     x = r[0]
-    y = r[1]
+    y = r[1]  
     v_x = r[2]
     v_y= r[3]
     radius = r_func(x,y)
