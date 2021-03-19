@@ -11,8 +11,8 @@ lancement=Time("2020-07-30")
 atterissage=Time("2021-02-18")
 # un nombre de jours juliens est attendu par la routine, d'ou le .jd position en km, vitesse en km par jour
 position, velocity = eph.position_and_velocity('mars',lancement.jd)
-p = transpose(position, axes=None)
-v = transpose(velocity, axes=None)
+p = transpose(position)
+v = transpose(velocity)
 
 GM = G.value*M_sun.value
 x_points = []
@@ -22,12 +22,12 @@ vx_points = []
 vy_points = []
 vz_points = []
 #Definition of intial values for all variables
-x_0 = p[0]*1000 #intial x position (m)
-y_0 = p[1]*1000 #inital y position (m)
-z_0 = p[2]*1000#initial z position (m)
-vx_0 = v[0]*1000/86400 #initial x velocity (m/s)
-vy_0 = v[1]*1000/86400 #intial y velocity (m/s)
-vz_0 = v[2]*1000/86400#initial z velocity (m/s)
+x_0 = p[0,0]*1000 #intial x position (m)
+y_0 = p[0,1]*1000 #inital y position (m)
+z_0 = p[0,2]*1000#initial z position (m)
+vx_0 = v[0,0]*1000/86400 #initial x velocity (m/s)
+vy_0 = v[0,1]*1000/86400 #intial y velocity (m/s)
+vz_0 = v[0,2]*1000/86400#initial z velocity (m/s)
 
 a = 0 #intial time (s)
 b = 86400*203 #final time (s) (203 days)
