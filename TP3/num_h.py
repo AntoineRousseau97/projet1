@@ -1,5 +1,5 @@
 from astropy.constants import G, M_sun #(m3 / (kg s2) and kg)
-from numpy import array, sqrt, arange, empty
+from numpy import array, sqrt, arange, empty, transpose
 import matplotlib.pyplot as plt
 from astropy.time import Time# ephemerides
 import de421
@@ -11,6 +11,8 @@ lancement=Time("2020-07-30")
 atterissage=Time("2021-02-18")
 # un nombre de jours juliens est attendu par la routine, d'ou le .jd position en km, vitesse en km par jour
 position, velocity = eph.position_and_velocity('mars',lancement.jd)
+p = transpose(position, axes=None)
+v = transpose(velocity, axes=None)
 
 GM = G.value*M_sun.value
 x_points = []
@@ -20,12 +22,12 @@ vx_points = []
 vy_points = []
 vz_points = []
 #Definition of intial values for all variables
-x_0 = position[0]*1000 #intial x position (m)
-y_0 = position[1]*1000 #inital y position (m)
-z_0 = position[2]*1000#initial z position (m)
-vx_0 = velocity[0]*1000/86400 #initial x velocity (m/s)
-vy_0 = velocity[1]*1000/86400 #intial y velocity (m/s)
-vz_0 = velocity[2]*1000/86400#initial z velocity (m/s)
+x_0 = p[0]*1000 #intial x position (m)
+y_0 = p[1]*1000 #inital y position (m)
+z_0 = p[2]*1000#initial z position (m)
+vx_0 = v[0]*1000/86400 #initial x velocity (m/s)
+vy_0 = v[1]*1000/86400 #intial y velocity (m/s)
+vz_0 = v[2]*1000/86400#initial z velocity (m/s)
 
 a = 0 #intial time (s)
 b = 86400*203 #final time (s) (203 days)
@@ -54,7 +56,7 @@ def f(r):
 
 tpoints = arange(a,b,H) 
 thetapoints = [] 
-r = array([x_0, y_0, z_0, vx_0, vy_0, vz_0], float)  #array containing x and y position
+r = array([x_0, y_0, z_0, vx_0, vy_0, vz_0], float)  #array containing positions and velocities
 # Do the "big steps" of size H 
 for t in tpoints: 
     thetapoints.append(r[0]) 
