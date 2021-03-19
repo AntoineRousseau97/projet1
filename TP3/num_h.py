@@ -11,8 +11,8 @@ lancement=Time("2020-07-30")
 atterissage=Time("2021-02-18")
 # un nombre de jours juliens est attendu par la routine, d'ou le .jd position en km, vitesse en km par jour
 position, velocity = eph.position_and_velocity('mars',lancement.jd)
-p = transpose(position)
-v = transpose(velocity)
+p = []
+v = []
 
 GM = G.value*M_sun.value
 x_points = []
@@ -22,12 +22,12 @@ vx_points = []
 vy_points = []
 vz_points = []
 #Definition of intial values for all variables
-x_0 = p[0,0]*1000 #intial x position (m)
-y_0 = p[0,1]*1000 #inital y position (m)
-z_0 = p[0,2]*1000#initial z position (m)
-vx_0 = v[0,0]*1000/86400 #initial x velocity (m/s)
-vy_0 = v[0,1]*1000/86400 #intial y velocity (m/s)
-vz_0 = v[0,2]*1000/86400#initial z velocity (m/s)
+x_0 = p[0]*1000 #intial x position (m)
+y_0 = p[1]*1000 #inital y position (m)
+z_0 = p[2]*1000#initial z position (m)
+vx_0 = v[0]*1000/86400 #initial x velocity (m/s)
+vy_0 = v[1]*1000/86400 #intial y velocity (m/s)
+vz_0 = v[2]*1000/86400#initial z velocity (m/s)
 
 a = 0 #intial time (s)
 b = 86400*203 #final time (s) (203 days)
@@ -55,12 +55,11 @@ def f(r):
     return array([fx, fy, fz, fv_x, fv_y, fv_z], float)
 
 tpoints = arange(a,b,H) 
+thetapoints = [] 
 r = array([x_0, y_0, z_0, vx_0, vy_0, vz_0], float)  #array containing positions and velocities
 # Do the "big steps" of size H 
 for t in tpoints: 
-    x_points.append(r[0])
-    y_points.append(r[1])
-    z_points.append(r[2])
+    thetapoints.append(r[0]) 
     # Do one modified mipoint step of size H 
     # to get things started 
     n = 1 
@@ -96,10 +95,6 @@ for t in tpoints:
     # before moving on to the next big step 
     r = R1[n-1] 
 # Plot the results 
-plt.plot(tpoints,x_points)
-plt.plot(tpoints,y_points)
-plt.plot(tpoints,z_points)
+plt.plot(tpoints,thetapoints) 
 #plot(tpoints,thetapoints,"b.") 
-plt.show()
-#print(x_points[-1], y_points[-1], z_points[-1])
-#print(eph.position('mars',atterissage.jd))
+plt.show() 

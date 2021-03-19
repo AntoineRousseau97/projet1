@@ -39,7 +39,7 @@ vy_0 = 500 #m/s
 r = array([x_0, y_0, vx_0, vy_0], float)    
 
 a = 0
-b = 31536000*100
+b = 31536000*100    
 N = 100000
 h = (b-a)/N   
 tpoints = arange(a,b,h)
