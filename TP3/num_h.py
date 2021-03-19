@@ -55,11 +55,12 @@ def f(r):
     return array([fx, fy, fz, fv_x, fv_y, fv_z], float)
 
 tpoints = arange(a,b,H) 
-thetapoints = [] 
 r = array([x_0, y_0, z_0, vx_0, vy_0, vz_0], float)  #array containing positions and velocities
 # Do the "big steps" of size H 
 for t in tpoints: 
-    thetapoints.append(r[0]) 
+    x_points.append(r[0])
+    y_points.append(r[1])
+    z_points.append(r[2])
     # Do one modified mipoint step of size H 
     # to get things started 
     n = 1 
@@ -95,6 +96,10 @@ for t in tpoints:
     # before moving on to the next big step 
     r = R1[n-1] 
 # Plot the results 
-plt.plot(tpoints,thetapoints) 
+plt.plot(tpoints,x_points)
+plt.plot(tpoints,y_points)
+plt.plot(tpoints,z_points)
 #plot(tpoints,thetapoints,"b.") 
-plt.show() 
+plt.show()
+#print(x_points[-1], y_points[-1], z_points[-1])
+#print(eph.position('mars',atterissage.jd))
