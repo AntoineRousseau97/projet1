@@ -1,6 +1,6 @@
 from math import sin,pi 
 from numpy import empty,array,arange, sqrt
-from pylab import plot,show 
+import matplotlib.pyplot as plt
 from astropy.constants import G, M_sun #(m3 / (kg s2) and kg)
 
 GM = G.value*M_sun.value
@@ -40,11 +40,14 @@ def f(r):
     return array([fx, fy, fv_x, fv_y], float)
 
 tpoints = arange(a,b,H) 
-thetapoints = [] 
-r = array([x_0, vx_0, y_0, vy_0], float)  #array containing x and y position
+r = array([x_0, y_0, vx_0, vy_0], float)  # array containing x and y position
 # Do the "big steps" of size H 
 for t in tpoints: 
-    thetapoints.append(r[0]) 
+    x_points.append(r[0])
+    y_points.append(r[1]) 
+    vx_points.append(r[2])
+    vy_points.append(r[3]) 
+    
     # Do one modified mipoint step of size H 
     # to get things started 
     n = 1 
@@ -79,7 +82,17 @@ for t in tpoints:
     # Set r equal to the most accurate estimate we have, 
     # before moving on to the next big step 
     r = R1[n-1] 
-# Plot the results 
-plot(tpoints,thetapoints) 
-#plot(tpoints,thetapoints,"b.") 
-show() 
+
+plt.plot(tpoints, x_points, color = "k", label = "Position en x")
+plt.plot(tpoints, y_points, color = "r", label = "Position en y")
+plt.xlabel("temps (s)")
+plt.ylabel("Position (m)")
+plt.legend()
+plt.show()
+
+#Plot of x position in function of y position
+plt.plot(x_points, y_points, "k")
+plt.plot(0,0,"ko")
+plt.xlabel("Position en x (m)")
+plt.ylabel("Position en y (m)")
+plt.show()
