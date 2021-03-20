@@ -11,7 +11,7 @@ def f(r,t):
     y = r[1]
     v_x = r[2]
     v_y= r[3]
-    radius = r_func(x,y)
+    radius = r_func(x,y)    
     fx = v_x
     fv_x = -GM*x/radius**3
     fy = v_y

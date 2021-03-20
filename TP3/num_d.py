@@ -26,6 +26,10 @@ def append_all(r, v):
     y_points.append(r[1])
     vx_points.append(v[0])
     vy_points.append(v[1])
+    vx2_points.append(v_2[0])
+    vy2_points.append(v_2[1])
+    x2_points.append(r_2[0])
+    y2_points.append(r_2[1])
     
 #Using astropy to define constants
 GM = G.value*M_sun.value
@@ -35,6 +39,10 @@ x_points = []
 y_points = []
 vx_points = []
 vy_points = []
+vx2_points = []
+vy2_points = []
+x2_points = []
+y2_points = []
 
 #Definition of intial values for all variables
 x_0 = 1.4710e11 #intial x posirion (m)
@@ -49,17 +57,34 @@ b = 31536000*3 #final time (s) (3 years)
 h = 3600 #step size (1 hour in seconds)
 tpoints = arange(a,b,h) 
 v_int = v + 0.5*h*f(r,v,0)[1] #initialization of v(t+1/2h)
+v_2 = v + h*f(r,v,0)[1]
 Ke = []
 U = []
+error = []
+r_2 = [0, 0]
 
 for t in tpoints:
     append_all(r,v)
     Ke += [0.5 * m * (v[0] ** 2 + v[1] ** 2)] # Kinectic Energy (J)
     U += [-GM*m/r_func(r[0], r[1])] # Potential Energy (J)
+    r_2 = r.copy()
+    v_2 = v.copy()
     r += h*v_int #r(t+h)
     k = h*f(r,v,t)[1] #k
     v = v_int + 0.5*k #v(t+h)
+    v_2 += k
+    r_2 += 2*h*v_2
     v_int += k #v(t+3/2h)
+    
+for i in range(2, len(x_points)):
+    err_x = ((x_points[i]-x2_points[i-1])/6)
+    err_y = ((y_points[i]-y2_points[i-1])/6)
+    error += [r_func(err_x, err_y)]
+
+error_year = (sum(error)/3)/1000
+print(error_year)
+
+
 
 #Changing energy list into arrays to sum them
 Ke = array(Ke)
