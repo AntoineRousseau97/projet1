@@ -30,7 +30,7 @@ vy_0 = v[0,1]*1000/86400 #intial y velocity (m/s)
 vz_0 = v[0,2]*1000/86400#initial z velocity (m/s)
 
 a = 0 #intial time (s)
-b = 86400*203 #final time (s) (203 days)
+b = 86400*1000 #final time (s) (203 days)
 N = 10000 #step size
 H = (b-a)/N 
 delta = 3.1709792e-5 #conversion of km/year into m/s
